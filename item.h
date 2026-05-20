@@ -11,7 +11,7 @@ class Item {
         int value;
     public:
         Item(string n,int v):name(n),value(v){
-            // что такое обстрактный класс? 
+            // что такое обстрактный класс?
         };
         string getName() const {return name;}
         int getValue() const {return value;}

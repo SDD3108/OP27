@@ -15,7 +15,9 @@ using namespace std;
 // типо нажал w и "P" поднялся на 1 клетку вверх в матрице итд
 
 // hw
-// class Item{
-// }
-// int main(){
-// }
+class Item{
+
+};
+int main(){
+    
+}
