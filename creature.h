@@ -1,13 +1,11 @@
 #ifndef CREATURE_H
-#define CREATURE_H
-
+// #define CREATURE_H
 #include <string>
 #include <vector>
 #include <memory>
-#include <ctime>
-#include <stdlib.h>
 #include "Point.h"
 #include "Item.h"
+
 using namespace std;
 // Абстрактный класс для всех живых существ в игре
 class Creature {
@@ -19,43 +17,35 @@ protected:
     Point position;
 
 public:
-    // TODO: Написать конструктор
-    Creature(string n,int h,int d,Point p):name(n),hp(h),damage(d),position(p){};
+    // Конструктор базового класса
+    Creature(string name, int hp, int damage, Point pos)
+        : name(name), hp(hp), maxHp(hp), damage(damage), position(pos) {}
+
     virtual ~Creature() = default;
 
-    // TODO: Написать геттеры и сеттеры (getPosition, setPosition, getName, getHp)
-    Point getPosition(){
-        return position;
-    };
-    void setPosition(Point newPosition){
-        position = newPosition;
-    };
-    string getName(){
-        return name;
-    };
-    int getHp(){
-        return hp;
-    };
+    // Геттеры и сеттеры
+    Point getPosition() const { return position; }
+    void setPosition(Point pos) { position = pos; }
+    string getName() const { return name; }
+    int getHp() const { return hp; }
+    int getMaxHp() const { return maxHp; }
+    int getDamage() const { return damage; }
+    
+    // Проверка, жива ли сущность
+    bool isAlive() const { return hp > 0; }
 
-    // TODO: Написать метод bool isAlive() (возвращает true, если hp > 0)
-    bool isAlive(){
-        return hp > 0;
-    }
-    // TODO: Написать метод void takeDamage(int amount) (уменьшает hp на amount, не уходя в минус)
-    void takeDamage(int amount){
+    // Получение урона (с ограничением нижней границы нуля)
+    void takeDamage(int amount) {
         hp -= amount;
-        if(hp < 0){
+        if (hp < 0) {
             hp = 0;
         }
     }
 
-    // Виртуальный метод атаки. Переопределяется у игрока для учета оружия
+    // Виртуальный метод атаки
     virtual void attack(Creature& target);
-    // virtual void attack(Creature& target){
-    //     target.takeDamage(damage);
-    // }
 
-    // Чисто виртуальный метод для логики хода (ИИ врагов или пустая заглушка у игрока)
+    // Чисто виртуальный метод для логики хода
     virtual void takeTurn() = 0;
 };
 
@@ -68,86 +58,51 @@ private:
     // Инвентарь на умных указателях
     vector<shared_ptr<Item>> inventory;
     
-    // Ячейки под текущую экипировку (изначально nullptr)
+    // Ячейки под текущую экипировку
     shared_ptr<Weapon> equippedWeapon;
     shared_ptr<Armor> equippedArmor;
 
 public:
-    // TODO: Написать конструктор (задать начальное ХП, урон, позицию, обнулить золото и опыт)
-    Player(Point p):Creature("Player",100,0,p),gold(0),exp(0),equippedWeapon(nullptr),equippedArmor(nullptr){
-        gold = 0;
-        exp = 0;
-    };
+    // Конструктор игрока
+    Player(Point pos) : Creature("Герой", 100, 10, pos), gold(0), exp(0), equippedWeapon(nullptr), equippedArmor(nullptr) {}
+    
+    // Методы изменения ресурсов персонажа
+    void addGold(int amount) { gold += amount; }
+    void addExp(int amount) { exp += amount; }
+    
+    int getGold() const { return gold; }
+    int getExp() const { return exp; }
 
-    // TODO: Написать методы addGold(int), addExp(int)
-    void addGold(int number){
-        gold += number;
-    };
-    void addExp(int number){
-        exp += number;
-    }
-    // TODO: Написать метод addToInventory(shared_ptr<Item>)
-    void addToInventory(shared_ptr<Item> item){
-        inventory.push_back(item);
-    };
+    // Добавление предмета в вектор рюкзака
+    void addToInventory(shared_ptr<Item> item) { inventory.push_back(item); }
 
     void showInventory() const;
     void useItem(int index); 
     
-    // void attack(Creature& target) override;
-    void attack(Creature& target) override{
-        int totalDamage = damage;
-        if(equippedWeapon){
-            totalDamage += equippedWeapon->getDamage();
-        }
-        target.takeDamage(totalDamage);
-    }
-    void takeTurn() override; // Можно оставить пустым, так как игрок ходит через Game
+    void attack(Creature& target) override;
+    void takeTurn() override; // Управляется внешним вводом в Game.cpp
 };
 
 // Базовый класс для всех монстров
 class Enemy : public Creature {
 public:
-    // TODO: Написать конструктор
-    Enemy(string n,int h,int d,Point p):Creature(n,h,d,p){};
+    // Конструктор монстра
+    Enemy(string name, int hp, int damage, Point pos) 
+        : Creature(name, hp, damage, pos) {}
+
     void takeTurn() override;
 };
 
 // Конкретный монстр: Гоблин
 class Goblin : public Enemy {
 public:
-    // TODO: Написать конструктор (задать дефолтные ХП и урон для Гоблина)
-    Goblin(string n, int h = 100,int d = 40,Point p):Enemy("goblin",30,5,p){};
-    // Разрешено переопределить attack() для уникальных критических ударов гоблина
-    void attack(Creature& target) override;
-    // void attack(Creature& target) override{
-    //     int totalDamage = damage;
-    //     if(rand() % 100 < 20){
-    //         totalDamage *= 2;
-    //     }
-    //     target.takeDamage(totalDamage);
-    // }
+    Goblin(Point pos) : Enemy("Гоблин", 30, 6, pos) {}
 };
 
 // Конкретный монстр: Дракон (Босс)
 class Dragon : public Enemy {
-    private:
-        int cooldown;
-    public:
-
-        // TODO: Написать конструктор
-        Dragon(Point p):Enemy("dragon",100,15,p),cooldown(0){};
-        // Разрешено добавить механику супер-удара (например, дыхание огнем раз в 3 хода)
-        void attack(Creature& target) override;
-        // void attack(Creature& target) override{
-        //     static int turnCounter = 0;
-        //     turnCounter++;
-        //     int totalDamage = damage;
-        //     if(turnCounter % 3 == 0){
-        //         totalDamage += 20;
-        //     }
-        //     target.takeDamage(totalDamage);
-        // };
+public:
+    Dragon(Point pos) : Enemy("Красный Дракон", 200, 25, pos) {}
 };
 
 #endif // CREATURE_H

@@ -1,6 +1,8 @@
 #include "creature.h"
 #include <iostream>
 using namespace std;
+
+
 // --- Реализация класса Creature ---
 // TODO: Написать конструктор, геттеры/сеттеры, isAlive() и takeDamage()
 void Creature::attack(Creature& target) {
@@ -36,6 +38,8 @@ void Player::useItem(int index) {
 void Player::attack(Creature& target) {
     // TODO: Рассчитать полный урон = базовый damage + урон от equippedWeapon (если оно есть).
     // Вызвать target.takeDamage с этим полным уроном.
+
+
 };
 
 void Player::takeTurn() {
