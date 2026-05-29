@@ -22,6 +22,13 @@ public:
     void generateProceduralDungeon();
     bool isWalkable(Point p) const;
     
+    int getWidth() const {
+        return width;    
+    };
+    int getHeight() const {
+        return height;
+    };
+    
     char getCell(Point p) const;
     void setCell(Point p, char c);
     

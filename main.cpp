@@ -8,6 +8,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <numeric>
+#include "game.h"
 using namespace std;
 
 // int main(){
@@ -61,3 +62,8 @@ using namespace std;
 // game project, у нас будет матрица и это типо игровое поле, игрок отображается как "P" и там будут всякие еще стены итд, пользователь будет управлять игроком через консоль вписывая wasd, 
 // типо нажал w и "P" поднялся на 1 клетку вверх в матрице итд
 
+int main(){
+    srand(static_cast<unsigned int>(time(0)));
+    Game game;
+    game.run();
+}
