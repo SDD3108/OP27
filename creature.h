@@ -1,10 +1,10 @@
 #ifndef CREATURE_H
-// #define CREATURE_H
+#define CREATURE_H
 #include <string>
 #include <vector>
 #include <memory>
-#include "Point.h"
-#include "Item.h"
+#include "point.h"
+#include "item.h"
 
 using namespace std;
 // Абстрактный класс для всех живых существ в игре

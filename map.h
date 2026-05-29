@@ -3,8 +3,9 @@
 
 #include <vector>
 #include <memory>
-#include "Point.h"
-#include "Creature.h"
+#include "point.h"
+#include "creature.h"
+using namespace std;
 
 class Map {
 private:
@@ -32,7 +33,7 @@ public:
     char getCell(Point p) const;
     void setCell(Point p, char c);
     
-    void draw(const Player& player, const std::vector<std::shared_ptr<Enemy>>& enemies);
+    void draw(const Player& player, const vector<shared_ptr<Enemy>>& enemies);
 };
 
 #endif // MAP_H

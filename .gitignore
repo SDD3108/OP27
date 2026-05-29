@@ -4,3 +4,6 @@ main.obj
 main.pdb
 vc140.pdb
 .vscode
+game
+*.o
+*.out

@@ -38,7 +38,7 @@ void Weapon::printInfo() const {
 // TODO: Реализовать serialize() -> записывать в файл тип предмета, имя, цену и урон
 void Weapon::serialize(ofstream& out) const{
     if(out.is_open()){
-        out << "Weapon" << endl;
+        out << "Weapon " << endl;
         out << name << endl;
         out << value << endl;
         out << damage << endl;
@@ -47,6 +47,22 @@ void Weapon::serialize(ofstream& out) const{
 void Armor::printInfo() const {
     cout << "[" << name << "] " << "Лечение: " << defense << ", Цена: " << value << endl;
 }
+void Armor::serialize(ofstream& out) const{
+    if(out.is_open()){
+        out << "Armor " << endl;
+        out << name << endl;
+        out << value << endl;
+        out << defense << endl;
+    }
+}
 void Potion::printInfo() const{
     cout << "[" << name << "] " << "Защита: " << healAmount << ", Цена: " << value << endl;
+}
+void Potion::serialize(ofstream& out) const{
+    if(out.is_open()){
+        out << "Potion " << endl;
+        out << name << endl;
+        out << value << endl;
+        out << healAmount << endl;
+    }
 }
